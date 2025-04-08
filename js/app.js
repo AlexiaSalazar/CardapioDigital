@@ -8,9 +8,9 @@ var MEU_CARRINHO = [];
 var MEU_ENDERECO = null;
 
 var VALOR_CARRINHO = 0;
-var VALOR_ENTREGA = 7.5;
+var VALOR_ENTREGA = 7;
 
-var CELULAR_EMPRESA = '5517991234567';
+var CELULAR_EMPRESA = '5519994702445';
 
 cardapio.eventos = {
 
@@ -24,7 +24,7 @@ cardapio.eventos = {
 
 cardapio.metodos = {
 
-    // obtem a lista de itens do cardápio
+    
     obterItensCardapio: (categoria = 'burgers', vermais = false) => {
 
         var filtro = MENU[categoria];
@@ -42,27 +42,27 @@ cardapio.metodos = {
             .replace(/\${preco}/g, e.price.toFixed(2).replace('.', ','))
             .replace(/\${id}/g, e.id)
 
-            // botão ver mais foi clicado (12 itens)
+            
             if (vermais && i >= 8 && i < 12) {
                 $("#itensCardapio").append(temp)
             }
 
-            // paginação inicial (8 itens)
+            
             if (!vermais && i < 8) {
                 $("#itensCardapio").append(temp)
             }
 
         })
 
-        // remove o ativo
+        
         $(".container-menu a").removeClass('active');
 
-        // seta o menu para ativo
+        
         $("#menu-" + categoria).addClass('active')
 
     },
 
-    // clique no botão de ver mais
+    
     verMais: () => {
 
         var ativo = $(".container-menu a.active").attr('id').split('menu-')[1];
@@ -72,7 +72,7 @@ cardapio.metodos = {
 
     },
 
-    // diminuir a quantidade do item no cardapio
+    
     diminuirQuantidade: (id) => {
 
         let qntdAtual = parseInt($("#qntd-" + id).text());
@@ -83,7 +83,7 @@ cardapio.metodos = {
 
     },
 
-    // aumentar a quantidade do item no cardapio
+    
     aumentarQuantidade: (id) => {
 
         let qntdAtual = parseInt($("#qntd-" + id).text());
@@ -91,33 +91,33 @@ cardapio.metodos = {
 
     },
 
-    // adicionar ao carrinho o item do cardápio
+    
     adicionarAoCarrinho: (id) => {
 
         let qntdAtual = parseInt($("#qntd-" + id).text());
 
         if (qntdAtual > 0) {
 
-            // obter a categoria ativa
+            
             var categoria = $(".container-menu a.active").attr('id').split('menu-')[1];
 
-            // obtem a lista de itens
+            
             let filtro = MENU[categoria];
 
-            // obtem o item
+            
             let item = $.grep(filtro, (e, i) => { return e.id == id });
 
             if (item.length > 0) {
 
-                // validar se já existe esse item no carrinho
+                
                 let existe = $.grep(MEU_CARRINHO, (elem, index) => { return elem.id == id });
 
-                // caso já exista o item no carrinho, só altera a quantidade
+                
                 if (existe.length > 0) {
                     let objIndex = MEU_CARRINHO.findIndex((obj => obj.id == id));
                     MEU_CARRINHO[objIndex].qntd = MEU_CARRINHO[objIndex].qntd + qntdAtual;
                 }
-                // caso ainda não exista o item no carrinho, adiciona ele 
+                
                 else {
                     item[0].qntd = qntdAtual;
                     MEU_CARRINHO.push(item[0])
@@ -134,7 +134,7 @@ cardapio.metodos = {
 
     },
 
-    // atualiza o badge de totais dos botões "Meu carrinho"
+    
     atualizarBadgeTotal: () => {
 
         var total = 0;
@@ -156,7 +156,7 @@ cardapio.metodos = {
 
     },
 
-    // abrir a modal de carrinho
+   
     abrirCarrinho: (abrir) => {
 
         if (abrir) {
@@ -169,7 +169,7 @@ cardapio.metodos = {
 
     },
 
-    // altera os texto e exibe os botões das etapas
+   
     carregarEtapa: (etapa) => {
 
         if (etapa == 1) {
@@ -222,7 +222,7 @@ cardapio.metodos = {
 
     },
 
-    // botão de voltar etapa
+    
     voltarEtapa: () => {
 
         let etapa = $(".etapa.active").length;
@@ -230,7 +230,7 @@ cardapio.metodos = {
 
     },
 
-    // carrega a lista de itens do carrinho
+
     carregarCarrinho: () => {
 
         cardapio.metodos.carregarEtapa(1);
@@ -249,7 +249,7 @@ cardapio.metodos = {
 
                 $("#itensCarrinho").append(temp);
 
-                // último item
+           
                 if ((i + 1) == MEU_CARRINHO.length) {
                     cardapio.metodos.carregarValores();
                 }
@@ -264,7 +264,7 @@ cardapio.metodos = {
 
     },
 
-    // diminuir quantidade do item no carrinho
+
     diminuirQuantidadeCarrinho: (id) => {
 
         let qntdAtual = parseInt($("#qntd-carrinho-" + id).text());
@@ -279,7 +279,6 @@ cardapio.metodos = {
 
     },
 
-    // aumentar quantidade do item no carrinho
     aumentarQuantidadeCarrinho: (id) => {
 
         let qntdAtual = parseInt($("#qntd-carrinho-" + id).text());
@@ -288,32 +287,32 @@ cardapio.metodos = {
 
     },
 
-    // botão remover item do carrinho
+   
     removerItemCarrinho: (id) => {
 
         MEU_CARRINHO = $.grep(MEU_CARRINHO, (e, i) => { return e.id != id });
         cardapio.metodos.carregarCarrinho();
 
-        // atualiza o botão carrinho com a quantidade atualizada
+        
         cardapio.metodos.atualizarBadgeTotal();
         
     },
 
-    // atualiza o carrinho com a quantidade atual
+   
     atualizarCarrinho: (id, qntd) => {
 
         let objIndex = MEU_CARRINHO.findIndex((obj => obj.id == id));
         MEU_CARRINHO[objIndex].qntd = qntd;
 
-        // atualiza o botão carrinho com a quantidade atualizada
+        
         cardapio.metodos.atualizarBadgeTotal();
 
-        // atualiza os valores (R$) totais do carrinho
+      
         cardapio.metodos.carregarValores();
 
     },
 
-    // carrega os valores de SubTotal, Entrega e Total
+    
     carregarValores: () => {
 
         VALOR_CARRINHO = 0;
@@ -336,7 +335,7 @@ cardapio.metodos = {
 
     },
 
-    // carregar a etapa enderecos
+    
     carregarEndereco: () => {
 
         if (MEU_CARRINHO.length <= 0) {
@@ -351,13 +350,12 @@ cardapio.metodos = {
     // API ViaCEP
     buscarCep: () => {
 
-        // cria a variavel com o valor do cep
+    
         var cep = $("#txtCEP").val().trim().replace(/\D/g, '');
 
-        // verifica se o CEP possui valor informado
+       
         if (cep != "") {
 
-            // Expressão regular para validar o CEP
             var validacep = /^[0-9]{8}$/;
 
             if (validacep.test(cep)) {
@@ -366,7 +364,7 @@ cardapio.metodos = {
 
                     if (!("erro" in dados)) {
 
-                        // Atualizar os campos com os valores retornados
+                        
                         $("#txtEndereco").val(dados.logradouro);
                         $("#txtBairro").val(dados.bairro);
                         $("#txtCidade").val(dados.localidade);
@@ -395,7 +393,7 @@ cardapio.metodos = {
 
     },
 
-    // validação antes de prosseguir para a etapa 3
+    
     resumoPedido: () => {
 
         let cep = $("#txtCEP").val().trim();
@@ -457,7 +455,7 @@ cardapio.metodos = {
 
     },
 
-    // carrega a etapa de Resumo do pedido
+    
     carregarResumo: () => {
 
         $("#listaItensResumo").html('');
@@ -480,7 +478,7 @@ cardapio.metodos = {
 
     },
 
-    // Atualiza o link do botão do WhatsApp
+    
     finalizarPedido: () => {
 
         if (MEU_CARRINHO.length > 0 && MEU_ENDERECO != null) {
@@ -498,12 +496,12 @@ cardapio.metodos = {
 
                 itens += `*${e.qntd}x* ${e.name} ....... R$ ${e.price.toFixed(2).replace('.', ',')} \n`;
 
-                // último item
+                
                 if ((i + 1) == MEU_CARRINHO.length) {
 
                     texto = texto.replace(/\${itens}/g, itens);
 
-                    // converte a URL
+                    
                     let encode = encodeURI(texto);
                     let URL = `https://wa.me/${CELULAR_EMPRESA}?text=${encode}`;
 
@@ -517,7 +515,7 @@ cardapio.metodos = {
 
     },
 
-    // carrega o link do botão reserva
+    
     carregarBotaoReserva: () => {
 
         var texto = 'Olá! gostaria de fazer uma *reserva*';
@@ -529,14 +527,14 @@ cardapio.metodos = {
 
     },
 
-    // carrega o botão de ligar
+    
     carregarBotaoLigar: () => {
 
         $("#btnLigar").attr('href', `tel:${CELULAR_EMPRESA}`);
 
     },
 
-    // abre o depoimento
+    
     abrirDepoimento: (depoimento) => {
 
         $("#depoimento-1").addClass('hidden');
@@ -552,7 +550,7 @@ cardapio.metodos = {
 
     },
 
-    // mensagens
+    
     mensagem: (texto, cor = 'red', tempo = 3500) => {
 
         let id = Math.floor(Date.now() * Math.random()).toString();
